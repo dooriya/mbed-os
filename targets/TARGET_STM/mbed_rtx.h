@@ -392,7 +392,22 @@
 #define OS_CLOCK                100000000
 #endif
 
-#elif defined(TARGET_STM32F412ZG)
+#elif defined(TARGET_STM32F412ZG) ||  defined(TARGET_MK3239)
+
+#ifndef INITIAL_SP
+#define INITIAL_SP              (0x20040000UL)
+#endif
+#ifndef OS_TASKCNT
+#define OS_TASKCNT              14
+#endif
+#ifndef OS_MAINSTKSIZE
+#define OS_MAINSTKSIZE          256
+#endif
+#ifndef OS_CLOCK
+#define OS_CLOCK                100000000
+#endif
+
+#elif defined(TARGET_MK3239)
 
 #ifndef INITIAL_SP
 #define INITIAL_SP              (0x20040000UL)
