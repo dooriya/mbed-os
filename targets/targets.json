@@ -2640,5 +2640,31 @@
     "SARA_NBIOT_EVK": {
         "inherits": ["SARA_NBIOT"],
         "extra_labels": ["ublox", "HI2110", "SARA_NBIOT"]
+    },
+    "MK3239": {
+        "supported_form_factors": ["ARDUINO"],
+        "core": "Cortex-M4F",
+        "default_toolchain": "ARM",
+        "extra_labels": ["MXCHIP", "STM", "STM32F4", "EMW1038"],
+        "supported_toolchains": ["ARM", "uARM", "GCC_ARM", "IAR"],
+        "inherits": ["Target"],
+        "detect_code": ["0826"],
+        "macros": ["TRANSACTION_QUEUE_SIZE_SPI=2", "USB_STM_HAL", "USBHOST_OTHER", "MXCHIP_LIBRARY", "HSE_VALUE=((uint32_t)26000000)"],
+        "device_has": ["ANALOGIN", "CAN", "ERROR_RED", "I2C", "I2CSLAVE", "I2C_ASYNCH", "INTERRUPTIN", "LOWPOWERTIMER", "PORTIN", "PORTINOUT", "PORTOUT", "PWMOUT", "RTC", "SERIAL", "SERIAL_ASYNCH", "SERIAL_FC", "SLEEP", "SPI", "SPISLAVE", "SPI_ASYNCH", "STDIO_MESSAGES", "TRNG", "SDIO", "QSPI"],
+        "release_versions": ["1", "0"],
+        "device_name": "MiCOKit3239"
+    },
+    "MK3166": {
+        "supported_form_factors": ["ARDUINO"],
+        "core": "Cortex-M4F",
+        "default_toolchain": "ARM",
+        "extra_labels": ["MXCHIP", "STM", "STM32F4", "EMW1062"],
+        "supported_toolchains": ["ARM", "uARM", "GCC_ARM", "IAR"],
+        "inherits": ["Target"],
+        "detect_code": ["0826"],
+        "macros": ["TRANSACTION_QUEUE_SIZE_SPI=2", "USB_STM_HAL", "USBHOST_OTHER", "MXCHIP_LIBRARY", "HSE_VALUE=((uint32_t)26000000)"],
+        "device_has": ["ANALOGIN", "CAN", "ERROR_RED", "I2C", "I2CSLAVE", "I2C_ASYNCH", "INTERRUPTIN", "LOWPOWERTIMER", "PORTIN", "PORTINOUT", "PORTOUT", "PWMOUT", "RTC", "SERIAL", "SERIAL_ASYNCH", "SERIAL_FC", "SLEEP", "SPI", "SPISLAVE", "SPI_ASYNCH", "STDIO_MESSAGES", "TRNG", "SDIO", "QSPI"],
+        "release_versions": ["1", "0"],
+        "device_name": "MiCOKit3166"
     }
 }
