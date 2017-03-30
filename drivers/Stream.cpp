@@ -17,7 +17,7 @@
 
 namespace mbed {
 
-Stream::Stream(const char *name) : FileLike(name), _file(NULL) {
+MbedStream::MbedStream(const char *name) : FileLike(name), _file(NULL) {
     // No lock needed in constructor
     /* open ourselves */
     char buf[12]; /* :0x12345678 + null byte */
@@ -26,33 +26,33 @@ Stream::Stream(const char *name) : FileLike(name), _file(NULL) {
     mbed_set_unbuffered_stream(_file);
 }
 
-Stream::~Stream() {
+MbedStream::~MbedStream() {
     // No lock can be used in destructor
     fclose(_file);
 }
 
-int Stream::putc(int c) {
+int MbedStream::putc(int c) {
     lock();
     fflush(_file);
     int ret = std::fputc(c, _file);
     unlock();
     return ret;
 }
-int Stream::puts(const char *s) {
+int MbedStream::puts(const char *s) {
     lock();
     fflush(_file);
     int ret = std::fputs(s, _file);
     unlock();
     return ret;
 }
-int Stream::getc() {
+int MbedStream::getc() {
     lock();
     fflush(_file);
     int ret = mbed_getc(_file);
     unlock();
     return ret;
 }
-char* Stream::gets(char *s, int size) {
+char* MbedStream::gets(char *s, int size) {
     lock();
     fflush(_file);
     char *ret = mbed_gets(s,size,_file);
@@ -60,11 +60,11 @@ char* Stream::gets(char *s, int size) {
     return ret;
 }
 
-int Stream::close() {
+int MbedStream::close() {
     return 0;
 }
 
-ssize_t Stream::write(const void* buffer, size_t length) {
+ssize_t MbedStream::write(const void* buffer, size_t length) {
     const char* ptr = (const char*)buffer;
     const char* end = ptr + length;
 
@@ -79,7 +79,7 @@ ssize_t Stream::write(const void* buffer, size_t length) {
     return ptr - (const char*)buffer;
 }
 
-ssize_t Stream::read(void* buffer, size_t length) {
+ssize_t MbedStream::read(void* buffer, size_t length) {
     char* ptr = (char*)buffer;
     char* end = ptr + length;
 
@@ -94,23 +94,23 @@ ssize_t Stream::read(void* buffer, size_t length) {
     return ptr - (const char*)buffer;
 }
 
-off_t Stream::lseek(off_t offset, int whence) {
+off_t MbedStream::lseek(off_t offset, int whence) {
     return 0;
 }
 
-int Stream::isatty() {
+int MbedStream::isatty() {
     return 0;
 }
 
-int Stream::fsync() {
+int MbedStream::fsync() {
     return 0;
 }
 
-off_t Stream::flen() {
+off_t MbedStream::flen() {
     return 0;
 }
 
-int Stream::printf(const char* format, ...) {
+int MbedStream::printf(const char* format, ...) {
     lock();
     std::va_list arg;
     va_start(arg, format);
@@ -121,7 +121,7 @@ int Stream::printf(const char* format, ...) {
     return r;
 }
 
-int Stream::scanf(const char* format, ...) {
+int MbedStream::scanf(const char* format, ...) {
     lock();
     std::va_list arg;
     va_start(arg, format);
@@ -132,7 +132,7 @@ int Stream::scanf(const char* format, ...) {
     return r;
 }
 
-int Stream::vprintf(const char* format, std::va_list args) {
+int MbedStream::vprintf(const char* format, std::va_list args) {
     lock();
     fflush(_file);
     int r = vfprintf(_file, format, args);
@@ -140,7 +140,7 @@ int Stream::vprintf(const char* format, std::va_list args) {
     return r;
 }
 
-int Stream::vscanf(const char* format, std::va_list args) {
+int MbedStream::vscanf(const char* format, std::va_list args) {
     lock();
     fflush(_file);
     int r = vfscanf(_file, format, args);
