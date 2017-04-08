@@ -508,7 +508,9 @@ class MK3239Code(object):
         with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_MK3239/boot.bin', 'rb') as f:
                 bootbin = f.read()
         with open(binf ,'w') as f:
-                f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
+        		f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
+        with open(binf.replace(".bin", ".ota.bin") ,'w') as f:
+        		f.write(appbin)
 
 class MK3166Code(object):
     """Hooks for the TEENSY3.1"""
@@ -520,7 +522,10 @@ class MK3166Code(object):
         with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_MK3166/boot.bin', 'rb') as f:
                 bootbin = f.read()
         with open(binf ,'w') as f:
-                f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
+        		f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
+        with open(binf.replace(".bin", ".ota.bin") ,'w') as f:
+        		f.write(appbin)
+                
 ################################################################################
 
 # Instantiate all public targets
