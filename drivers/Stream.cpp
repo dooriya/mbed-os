@@ -94,19 +94,26 @@ ssize_t MbedStream::read(void* buffer, size_t length) {
     return ptr - (const char*)buffer;
 }
 
-off_t MbedStream::lseek(off_t offset, int whence) {
+off_t MbedStream::seek(off_t offset, int whence) {
     return 0;
+}
+
+off_t MbedStream::tell() {
+    return 0;
+}
+
+void MbedStream::rewind() {
 }
 
 int MbedStream::isatty() {
     return 0;
 }
 
-int MbedStream::fsync() {
+int MbedStream::sync() {
     return 0;
 }
 
-off_t MbedStream::flen() {
+size_t MbedStream::size() {
     return 0;
 }
 
