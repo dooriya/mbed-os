@@ -507,9 +507,9 @@ class MK3239Code(object):
                 appbin = f.read()
         with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_MK3239/boot.bin', 'rb') as f:
                 bootbin = f.read()
-        with open(binf ,'w') as f:
+        with open(binf ,'wb') as f:
         		f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
-        with open(binf.replace(".bin", ".ota.bin") ,'w') as f:
+        with open(binf.replace(".bin", ".ota.bin") ,'wb') as f:
         		f.write(appbin)
 
 class MK3166Code(object):
@@ -521,11 +521,38 @@ class MK3166Code(object):
                 appbin = f.read()
         with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_MK3166/boot.bin', 'rb') as f:
                 bootbin = f.read()
-        with open(binf ,'w') as f:
+        with open(binf ,'wb') as f:
         		f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
-        with open(binf.replace(".bin", ".ota.bin") ,'w') as f:
+        with open(binf.replace(".bin", ".ota.bin") ,'wb') as f:
+        		f.write(appbin)
+        		
+class AZ3166Code(object):
+    """Hooks for the TEENSY3.1"""
+    @staticmethod
+    def binary_hook(t_self, resources, elf, binf):
+        """Hook that is run after elf is generated"""
+        with open(binf,'rb') as f:
+                appbin = f.read()
+        with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_AZ3166/boot.bin', 'rb') as f:
+                bootbin = f.read()
+        with open(binf ,'wb') as f:
+        		f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
+        with open(binf.replace(".bin", ".ota.bin") ,'wb') as f:
         		f.write(appbin)
                 
+class AZ3239Code(object):
+    """Hooks for the TEENSY3.1"""
+    @staticmethod
+    def binary_hook(t_self, resources, elf, binf):
+        """Hook that is run after elf is generated"""
+        with open(binf,'rb') as f:
+                appbin = f.read()
+        with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_AZ3239/boot.bin', 'rb') as f:
+                bootbin = f.read()
+        with open(binf ,'wb') as f:
+        		f.write(bootbin+'\xFF'*(0x8000-len(bootbin))+appbin)
+        with open(binf.replace(".bin", ".ota.bin") ,'wb') as f:
+        		f.write(appbin)		
 ################################################################################
 
 # Instantiate all public targets
