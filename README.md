@@ -23,4 +23,4 @@ We have a getting started guide for contributors working on mbed OS:
 
 ## Command to build archive file
 
-python .\tools\build.py -t GCC_ARM -m AZ3166 -v -j 1 --source . --build ./build
+python .\tools\build.py -t GCC_ARM -m AZ3166 -v -j 1 --source . --build ./build -DUSE_HAL_DRIVER, -DSTM32_DPALH_FILE="<stm32f4xx.h>"
