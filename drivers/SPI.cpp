@@ -16,6 +16,10 @@
 #include "drivers/SPI.h"
 #include "platform/mbed_critical.h"
 
+#if DEVICE_SPI_ASYNCH
+#include "platform/mbed_sleep.h"
+#endif
+
 #if DEVICE_SPI
 
 namespace mbed {
@@ -32,27 +36,40 @@ MbedSPI::MbedSPI(PinName mosi, PinName miso, PinName sclk, PinName ssel) :
 #endif
         _bits(8),
         _mode(0),
-        _hz(1000000) {
+        _hz(1000000),
+        _write_fill(SPI_FILL_CHAR) {
     // No lock needed in the constructor
 
     spi_init(&_spi, mosi, miso, sclk, ssel);
-    aquire();
+    _acquire();
 }
 
 void MbedSPI::format(int bits, int mode) {
     lock();
     _bits = bits;
     _mode = mode;
-    MbedSPI::_owner = NULL; // Not that elegant, but works. rmeyer
-    aquire();
+    // If changing format while you are the owner than just
+    // update format, but if owner is changed than even frequency should be
+    // updated which is done by acquire.
+    if (_owner == this) {
+        spi_format(&_spi, _bits, _mode, 0);
+    } else {
+        _acquire();
+    }
     unlock();
 }
 
 void MbedSPI::frequency(int hz) {
     lock();
     _hz = hz;
-    MbedSPI::_owner = NULL; // Not that elegant, but works. rmeyer
-    aquire();
+    // If changing format while you are the owner than just
+    // update frequency, but if owner is changed than even frequency should be
+    // updated which is done by acquire.
+    if (_owner == this) {
+        spi_frequency(&_spi, _hz);
+    } else {
+        _acquire();
+    }
     unlock();
 }
 
@@ -70,10 +87,27 @@ void MbedSPI::aquire() {
     unlock();
 }
 
+// Note: Private function with no locking
+void MbedSPI::_acquire() {
+     if (_owner != this) {
+        spi_format(&_spi, _bits, _mode, 0);
+        spi_frequency(&_spi, _hz);
+        _owner = this;
+    }
+}
+
 int MbedSPI::write(int value) {
     lock();
-    aquire();
+    _acquire();
     int ret = spi_master_write(&_spi, value);
+    unlock();
+    return ret;
+}
+
+int MbedSPI::write(const char *tx_buffer, int tx_length, char *rx_buffer, int rx_length) {
+    lock();
+    _acquire();
+    int ret = spi_master_block_write(&_spi, tx_buffer, tx_length, rx_buffer, rx_length, _write_fill);
     unlock();
     return ret;
 }
@@ -84,6 +118,12 @@ void MbedSPI::lock() {
 
 void MbedSPI::unlock() {
     _mutex->unlock();
+}
+
+void MbedSPI::set_default_write_value(char data) {
+    lock();
+    _write_fill = data;
+    unlock();
 }
 
 #if DEVICE_SPI_ASYNCH
@@ -100,6 +140,7 @@ int MbedSPI::transfer(const void *tx_buffer, int tx_length, void *rx_buffer, int
 void MbedSPI::abort_transfer()
 {
     spi_abort_asynch(&_spi);
+    sleep_manager_unlock_deep_sleep();
 #if TRANSACTION_QUEUE_SIZE_SPI
     dequeue_transaction();
 #endif
@@ -159,7 +200,8 @@ int MbedSPI::queue_transfer(const void *tx_buffer, int tx_length, void *rx_buffe
 
 void MbedSPI::start_transfer(const void *tx_buffer, int tx_length, void *rx_buffer, int rx_length, unsigned char bit_width, const event_callback_t& callback, int event)
 {
-    aquire();
+    sleep_manager_lock_deep_sleep();
+    _acquire();
     _callback = callback;
     _irq.callback(&MbedSPI::irq_handler_asynch);
     spi_master_transfer(&_spi, tx_buffer, tx_length, rx_buffer, rx_length, bit_width, _irq.entry(), event , _usage);
@@ -188,6 +230,7 @@ void MbedSPI::irq_handler_asynch(void)
 {
     int event = spi_irq_handler_asynch(&_spi);
     if (_callback && (event & SPI_EVENT_ALL)) {
+        sleep_manager_unlock_deep_sleep();
         _callback.call(event & SPI_EVENT_ALL);
     }
 #if TRANSACTION_QUEUE_SIZE_SPI

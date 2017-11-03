@@ -16,12 +16,12 @@
 #ifndef MBED_H
 #define MBED_H
 
-#define MBED_LIBRARY_VERSION 140
+#define MBED_LIBRARY_VERSION 154
 
 #if MBED_CONF_RTOS_PRESENT
 // RTOS present, this is valid only for mbed OS 5
 #define MBED_MAJOR_VERSION 5
-#define MBED_MINOR_VERSION 4
+#define MBED_MINOR_VERSION 6
 #define MBED_PATCH_VERSION 3
 
 #else
@@ -32,7 +32,6 @@
 #endif
 
 #define MBED_ENCODE_VERSION(major, minor, patch) ((major)*10000 + (minor)*100 + (patch))
-
 #define MBED_VERSION MBED_ENCODE_VERSION(MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION)
 
 #if MBED_CONF_RTOS_PRESENT
@@ -41,6 +40,7 @@
 
 #if MBED_CONF_NSAPI_PRESENT
 #include "netsocket/nsapi.h"
+#include "netsocket/nsapi_ppp.h"
 #endif
 
 #if MBED_CONF_EVENTS_PRESENT
@@ -63,6 +63,7 @@
 #include "platform/mbed_error.h"
 #include "platform/mbed_interface.h"
 #include "platform/mbed_assert.h"
+#include "platform/mbed_debug.h"
 
 // mbed Peripheral components
 #include "drivers/DigitalIn.h"
@@ -85,6 +86,7 @@
 #include "drivers/Ethernet.h"
 #include "drivers/CAN.h"
 #include "drivers/RawSerial.h"
+#include "drivers/UARTSerial.h"
 #include "drivers/FlashIAP.h"
 
 // mbed Internal components
@@ -94,12 +96,19 @@
 #include "drivers/LowPowerTimeout.h"
 #include "drivers/LowPowerTicker.h"
 #include "drivers/LowPowerTimer.h"
-#include "drivers/LocalFileSystem.h"
+#include "platform/LocalFileSystem.h"
 #include "drivers/InterruptIn.h"
 #include "platform/mbed_wait_api.h"
 #include "hal/sleep_api.h"
 #include "platform/mbed_sleep.h"
 #include "platform/mbed_rtc_time.h"
+#include "platform/mbed_poll.h"
+#include "platform/ATCmdParser.h"
+#include "platform/FileSystemHandle.h"
+#include "platform/FileHandle.h"
+#include "platform/DirHandle.h"
+#include "platform/CriticalSectionLock.h"
+#include "platform/DeepSleepLock.h"
 
 // mbed Non-hardware components
 #include "platform/Callback.h"
