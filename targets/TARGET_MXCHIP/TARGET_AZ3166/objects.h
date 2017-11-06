@@ -46,7 +46,7 @@ struct analogin_s {
     uint8_t channel;
 };
 
-struct can_s {
+struct mbed_can_s {
     CANName can;
     int index;
 };

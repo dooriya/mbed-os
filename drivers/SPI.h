@@ -73,7 +73,7 @@ namespace mbed {
  * @endcode
  * @ingroup drivers
  */
-class MbedSPI : private NonCopyable<SPI> {
+class MbedSPI : private NonCopyable<MbedSPI> {
 
 public:
 

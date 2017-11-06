@@ -37,11 +37,11 @@ extern char* mbed_gets(char *s, int size, std::FILE *_file);
  * @note Synchronization level: Set by subclass
  * @ingroup platform
  */
-class Stream : public FileLike, private NonCopyable<Stream> {
+class MbedStream : public FileLike, private NonCopyable<MbedStream> {
 
 public:
-    Stream(const char *name=NULL);
-    virtual ~Stream();
+    MbedStream(const char *name=NULL);
+    virtual ~MbedStream();
 
     int putc(int c);
     int puts(const char *s);

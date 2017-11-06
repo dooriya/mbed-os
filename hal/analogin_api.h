@@ -29,7 +29,7 @@ extern "C" {
 
 /** Analogin hal structure. analogin_s is declared in the target's hal
  */
-typedef struct analogin_s analogin_t;
+typedef struct mbed_analogin_s analogin_t;
 
 /**
  * \defgroup hal_analogin Analogin hal functions

@@ -50,7 +50,7 @@ namespace mbed {
  * @endcode
  * @ingroup drivers
  */
-class MbedSerial : public SerialBase, public Stream, private NonCopyable<Serial> {
+class MbedSerial : public SerialBase, public MbedStream, private NonCopyable<MbedSerial> {
 
 public:
 #if DEVICE_SERIAL_ASYNCH

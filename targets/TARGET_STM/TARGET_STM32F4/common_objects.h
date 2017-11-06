@@ -116,7 +116,7 @@ struct flash_s {
 };
 #endif
 
-struct analogin_s {
+struct mbed_analogin_s {
     ADC_HandleTypeDef handle;
     PinName pin;
     uint8_t channel;

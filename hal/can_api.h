@@ -55,7 +55,7 @@ typedef enum {
 
 typedef void (*can_irq_handler)(uint32_t id, CanIrqType type);
 
-typedef struct can_s can_t;
+typedef struct mbed_can_s can_t;
 
 void          can_init      (can_t *obj, PinName rd, PinName td);
 void          can_init_freq (can_t *obj, PinName rd, PinName td, int hz);
