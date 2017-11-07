@@ -906,7 +906,9 @@ typedef struct
 #define USART1_BASE           (APB2PERIPH_BASE + 0x1000U)
 #define USART6_BASE           (APB2PERIPH_BASE + 0x1400U)
 #define ADC1_BASE             (APB2PERIPH_BASE + 0x2000U)
-#define ADC_BASE              (APB2PERIPH_BASE + 0x2300U)
+#define ADC1_COMMON_BASE      (APB2PERIPH_BASE + 0x2300U)
+/* Legacy define */
+#define ADC_BASE               ADC1_COMMON_BASE
 #define SDIO_BASE             (APB2PERIPH_BASE + 0x2C00U)
 #define SPI1_BASE             (APB2PERIPH_BASE + 0x3000U)
 #define SPI4_BASE             (APB2PERIPH_BASE + 0x3400U)
@@ -981,6 +983,10 @@ typedef struct
 #define USB_OTG_FIFO_BASE                    0x1000U
 #define USB_OTG_FIFO_SIZE                    0x1000U
 
+#define UID_BASE                     0x1FFF7A10U           /*!< Unique device ID register base address */
+#define FLASHSIZE_BASE               0x1FFF7A22U           /*!< FLASH Size register base address       */
+#define PACKAGE_BASE                 0x1FFF7BF0U           /*!< Package size register base address     */
+
 /**
   * @}
   */
@@ -1019,6 +1025,7 @@ typedef struct
 #define USART6              ((USART_TypeDef *) USART6_BASE)
 #define ADC                 ((ADC_Common_TypeDef *) ADC_BASE)
 #define ADC1                ((ADC_TypeDef *) ADC1_BASE)
+#define ADC1_COMMON         ((ADC_Common_TypeDef *) ADC1_COMMON_BASE)
 #define SDIO                ((SDIO_TypeDef *) SDIO_BASE)
 #define SPI1                ((SPI_TypeDef *) SPI1_BASE)
 #define SPI4                ((SPI_TypeDef *) SPI4_BASE)
@@ -1547,21 +1554,33 @@ typedef struct
 #define  CAN_ESR_REC                         0xFF000000U        /*!<Receive Error Counter */
 
 /*******************  Bit definition for CAN_BTR register  ********************/
-#define  CAN_BTR_BRP                         0x000003FFU        /*!<Baud Rate Prescaler */
-#define  CAN_BTR_TS1                         0x000F0000U        /*!<Time Segment 1 */
-#define  CAN_BTR_TS1_0                       0x00010000U        /*!<Bit 0 */
-#define  CAN_BTR_TS1_1                       0x00020000U        /*!<Bit 1 */
-#define  CAN_BTR_TS1_2                       0x00040000U        /*!<Bit 2 */
-#define  CAN_BTR_TS1_3                       0x00080000U        /*!<Bit 3 */
-#define  CAN_BTR_TS2                         0x00700000U        /*!<Time Segment 2 */
-#define  CAN_BTR_TS2_0                       0x00100000U        /*!<Bit 0 */
-#define  CAN_BTR_TS2_1                       0x00200000U        /*!<Bit 1 */
-#define  CAN_BTR_TS2_2                       0x00400000U        /*!<Bit 2 */
-#define  CAN_BTR_SJW                         0x03000000U        /*!<Resynchronization Jump Width */
-#define  CAN_BTR_SJW_0                       0x01000000U        /*!<Bit 0 */
-#define  CAN_BTR_SJW_1                       0x02000000U        /*!<Bit 1 */
-#define  CAN_BTR_LBKM                        0x40000000U        /*!<Loop Back Mode (Debug) */
-#define  CAN_BTR_SILM                        0x80000000U        /*!<Silent Mode */
+#define CAN_BTR_BRP_Pos        (0U)                                            
+#define CAN_BTR_BRP_Msk        (0x3FFU << CAN_BTR_BRP_Pos)                     /*!< 0x000003FF */
+#define CAN_BTR_BRP            CAN_BTR_BRP_Msk                                 /*!<Baud Rate Prescaler */
+#define CAN_BTR_TS1_Pos        (16U)                                           
+#define CAN_BTR_TS1_Msk        (0xFU << CAN_BTR_TS1_Pos)                       /*!< 0x000F0000 */
+#define CAN_BTR_TS1            CAN_BTR_TS1_Msk                                 /*!<Time Segment 1 */
+#define CAN_BTR_TS1_0          (0x1U << CAN_BTR_TS1_Pos)                       /*!< 0x00010000 */
+#define CAN_BTR_TS1_1          (0x2U << CAN_BTR_TS1_Pos)                       /*!< 0x00020000 */
+#define CAN_BTR_TS1_2          (0x4U << CAN_BTR_TS1_Pos)                       /*!< 0x00040000 */
+#define CAN_BTR_TS1_3          (0x8U << CAN_BTR_TS1_Pos)                       /*!< 0x00080000 */
+#define CAN_BTR_TS2_Pos        (20U)                                           
+#define CAN_BTR_TS2_Msk        (0x7U << CAN_BTR_TS2_Pos)                       /*!< 0x00700000 */
+#define CAN_BTR_TS2            CAN_BTR_TS2_Msk                                 /*!<Time Segment 2 */
+#define CAN_BTR_TS2_0          (0x1U << CAN_BTR_TS2_Pos)                       /*!< 0x00100000 */
+#define CAN_BTR_TS2_1          (0x2U << CAN_BTR_TS2_Pos)                       /*!< 0x00200000 */
+#define CAN_BTR_TS2_2          (0x4U << CAN_BTR_TS2_Pos)                       /*!< 0x00400000 */
+#define CAN_BTR_SJW_Pos        (24U)                                           
+#define CAN_BTR_SJW_Msk        (0x3U << CAN_BTR_SJW_Pos)                       /*!< 0x03000000 */
+#define CAN_BTR_SJW            CAN_BTR_SJW_Msk                                 /*!<Resynchronization Jump Width */
+#define CAN_BTR_SJW_0          (0x1U << CAN_BTR_SJW_Pos)                       /*!< 0x01000000 */
+#define CAN_BTR_SJW_1          (0x2U << CAN_BTR_SJW_Pos)                       /*!< 0x02000000 */
+#define CAN_BTR_LBKM_Pos       (30U)                                           
+#define CAN_BTR_LBKM_Msk       (0x1U << CAN_BTR_LBKM_Pos)                      /*!< 0x40000000 */
+#define CAN_BTR_LBKM           CAN_BTR_LBKM_Msk                                /*!<Loop Back Mode (Debug) */
+#define CAN_BTR_SILM_Pos       (31U)                                           
+#define CAN_BTR_SILM_Msk       (0x1U << CAN_BTR_SILM_Pos)                      /*!< 0x80000000 */
+#define CAN_BTR_SILM           CAN_BTR_SILM_Msk                                /*!<Silent Mode */
 
 
 /*!<Mailbox registers */
@@ -4493,73 +4512,121 @@ typedef struct
 /*                                                                            */
 /******************************************************************************/
 /********************  Bit definition for RCC_CR register  ********************/
-#define  RCC_CR_HSION                        0x00000001U
-#define  RCC_CR_HSIRDY                       0x00000002U
+#define RCC_CR_HSION_Pos                   (0U)                                
+#define RCC_CR_HSION_Msk                   (0x1U << RCC_CR_HSION_Pos)          /*!< 0x00000001 */
+#define RCC_CR_HSION                       RCC_CR_HSION_Msk                    
+#define RCC_CR_HSIRDY_Pos                  (1U)                                
+#define RCC_CR_HSIRDY_Msk                  (0x1U << RCC_CR_HSIRDY_Pos)         /*!< 0x00000002 */
+#define RCC_CR_HSIRDY                      RCC_CR_HSIRDY_Msk                   
 
-#define  RCC_CR_HSITRIM                      0x000000F8U
-#define  RCC_CR_HSITRIM_0                    0x00000008U/*!<Bit 0 */
-#define  RCC_CR_HSITRIM_1                    0x00000010U/*!<Bit 1 */
-#define  RCC_CR_HSITRIM_2                    0x00000020U/*!<Bit 2 */
-#define  RCC_CR_HSITRIM_3                    0x00000040U/*!<Bit 3 */
-#define  RCC_CR_HSITRIM_4                    0x00000080U/*!<Bit 4 */
+#define RCC_CR_HSITRIM_Pos                 (3U)                                
+#define RCC_CR_HSITRIM_Msk                 (0x1FU << RCC_CR_HSITRIM_Pos)       /*!< 0x000000F8 */
+#define RCC_CR_HSITRIM                     RCC_CR_HSITRIM_Msk                  
+#define RCC_CR_HSITRIM_0                   (0x01U << RCC_CR_HSITRIM_Pos)       /*!< 0x00000008 */
+#define RCC_CR_HSITRIM_1                   (0x02U << RCC_CR_HSITRIM_Pos)       /*!< 0x00000010 */
+#define RCC_CR_HSITRIM_2                   (0x04U << RCC_CR_HSITRIM_Pos)       /*!< 0x00000020 */
+#define RCC_CR_HSITRIM_3                   (0x08U << RCC_CR_HSITRIM_Pos)       /*!< 0x00000040 */
+#define RCC_CR_HSITRIM_4                   (0x10U << RCC_CR_HSITRIM_Pos)       /*!< 0x00000080 */
 
-#define  RCC_CR_HSICAL                       0x0000FF00U
-#define  RCC_CR_HSICAL_0                     0x00000100U/*!<Bit 0 */
-#define  RCC_CR_HSICAL_1                     0x00000200U/*!<Bit 1 */
-#define  RCC_CR_HSICAL_2                     0x00000400U/*!<Bit 2 */
-#define  RCC_CR_HSICAL_3                     0x00000800U/*!<Bit 3 */
-#define  RCC_CR_HSICAL_4                     0x00001000U/*!<Bit 4 */
-#define  RCC_CR_HSICAL_5                     0x00002000U/*!<Bit 5 */
-#define  RCC_CR_HSICAL_6                     0x00004000U/*!<Bit 6 */
-#define  RCC_CR_HSICAL_7                     0x00008000U/*!<Bit 7 */
+#define RCC_CR_HSICAL_Pos                  (8U)                                
+#define RCC_CR_HSICAL_Msk                  (0xFFU << RCC_CR_HSICAL_Pos)        /*!< 0x0000FF00 */
+#define RCC_CR_HSICAL                      RCC_CR_HSICAL_Msk                   
+#define RCC_CR_HSICAL_0                    (0x01U << RCC_CR_HSICAL_Pos)        /*!< 0x00000100 */
+#define RCC_CR_HSICAL_1                    (0x02U << RCC_CR_HSICAL_Pos)        /*!< 0x00000200 */
+#define RCC_CR_HSICAL_2                    (0x04U << RCC_CR_HSICAL_Pos)        /*!< 0x00000400 */
+#define RCC_CR_HSICAL_3                    (0x08U << RCC_CR_HSICAL_Pos)        /*!< 0x00000800 */
+#define RCC_CR_HSICAL_4                    (0x10U << RCC_CR_HSICAL_Pos)        /*!< 0x00001000 */
+#define RCC_CR_HSICAL_5                    (0x20U << RCC_CR_HSICAL_Pos)        /*!< 0x00002000 */
+#define RCC_CR_HSICAL_6                    (0x40U << RCC_CR_HSICAL_Pos)        /*!< 0x00004000 */
+#define RCC_CR_HSICAL_7                    (0x80U << RCC_CR_HSICAL_Pos)        /*!< 0x00008000 */
 
-#define  RCC_CR_HSEON                        0x00010000U
-#define  RCC_CR_HSERDY                       0x00020000U
-#define  RCC_CR_HSEBYP                       0x00040000U
-#define  RCC_CR_CSSON                        0x00080000U
-#define  RCC_CR_PLLON                        0x01000000U
-#define  RCC_CR_PLLRDY                       0x02000000U
-#define  RCC_CR_PLLI2SON                     0x04000000U
-#define  RCC_CR_PLLI2SRDY                    0x08000000U
+#define RCC_CR_HSEON_Pos                   (16U)                               
+#define RCC_CR_HSEON_Msk                   (0x1U << RCC_CR_HSEON_Pos)          /*!< 0x00010000 */
+#define RCC_CR_HSEON                       RCC_CR_HSEON_Msk                    
+#define RCC_CR_HSERDY_Pos                  (17U)                               
+#define RCC_CR_HSERDY_Msk                  (0x1U << RCC_CR_HSERDY_Pos)         /*!< 0x00020000 */
+#define RCC_CR_HSERDY                      RCC_CR_HSERDY_Msk                   
+#define RCC_CR_HSEBYP_Pos                  (18U)                               
+#define RCC_CR_HSEBYP_Msk                  (0x1U << RCC_CR_HSEBYP_Pos)         /*!< 0x00040000 */
+#define RCC_CR_HSEBYP                      RCC_CR_HSEBYP_Msk                   
+#define RCC_CR_CSSON_Pos                   (19U)                               
+#define RCC_CR_CSSON_Msk                   (0x1U << RCC_CR_CSSON_Pos)          /*!< 0x00080000 */
+#define RCC_CR_CSSON                       RCC_CR_CSSON_Msk                    
+#define RCC_CR_PLLON_Pos                   (24U)                               
+#define RCC_CR_PLLON_Msk                   (0x1U << RCC_CR_PLLON_Pos)          /*!< 0x01000000 */
+#define RCC_CR_PLLON                       RCC_CR_PLLON_Msk                    
+#define RCC_CR_PLLRDY_Pos                  (25U)                               
+#define RCC_CR_PLLRDY_Msk                  (0x1U << RCC_CR_PLLRDY_Pos)         /*!< 0x02000000 */
+#define RCC_CR_PLLRDY                      RCC_CR_PLLRDY_Msk     
+/*
+ * @brief Specific device feature definitions (not present on all devices in the STM32F4 serie)
+ */
+#define RCC_PLLI2S_SUPPORT                                                     /*!< Support PLLI2S oscillator */
+
+#define RCC_CR_PLLI2SON_Pos                (26U)                               
+#define RCC_CR_PLLI2SON_Msk                (0x1U << RCC_CR_PLLI2SON_Pos)       /*!< 0x04000000 */
+#define RCC_CR_PLLI2SON                    RCC_CR_PLLI2SON_Msk                 
+#define RCC_CR_PLLI2SRDY_Pos               (27U)                               
+#define RCC_CR_PLLI2SRDY_Msk               (0x1U << RCC_CR_PLLI2SRDY_Pos)      /*!< 0x08000000 */
+#define RCC_CR_PLLI2SRDY                   RCC_CR_PLLI2SRDY_Msk  
 
 /********************  Bit definition for RCC_PLLCFGR register  ***************/
-#define  RCC_PLLCFGR_PLLM                    0x0000003FU
-#define  RCC_PLLCFGR_PLLM_0                  0x00000001U
-#define  RCC_PLLCFGR_PLLM_1                  0x00000002U
-#define  RCC_PLLCFGR_PLLM_2                  0x00000004U
-#define  RCC_PLLCFGR_PLLM_3                  0x00000008U
-#define  RCC_PLLCFGR_PLLM_4                  0x00000010U
-#define  RCC_PLLCFGR_PLLM_5                  0x00000020U
+#define RCC_PLLCFGR_PLLM_Pos               (0U)                                
+#define RCC_PLLCFGR_PLLM_Msk               (0x3FU << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x0000003F */
+#define RCC_PLLCFGR_PLLM                   RCC_PLLCFGR_PLLM_Msk                
+#define RCC_PLLCFGR_PLLM_0                 (0x01U << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x00000001 */
+#define RCC_PLLCFGR_PLLM_1                 (0x02U << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x00000002 */
+#define RCC_PLLCFGR_PLLM_2                 (0x04U << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x00000004 */
+#define RCC_PLLCFGR_PLLM_3                 (0x08U << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x00000008 */
+#define RCC_PLLCFGR_PLLM_4                 (0x10U << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x00000010 */
+#define RCC_PLLCFGR_PLLM_5                 (0x20U << RCC_PLLCFGR_PLLM_Pos)     /*!< 0x00000020 */
 
-#define  RCC_PLLCFGR_PLLN                     0x00007FC0U
-#define  RCC_PLLCFGR_PLLN_0                   0x00000040U
-#define  RCC_PLLCFGR_PLLN_1                   0x00000080U
-#define  RCC_PLLCFGR_PLLN_2                   0x00000100U
-#define  RCC_PLLCFGR_PLLN_3                   0x00000200U
-#define  RCC_PLLCFGR_PLLN_4                   0x00000400U
-#define  RCC_PLLCFGR_PLLN_5                   0x00000800U
-#define  RCC_PLLCFGR_PLLN_6                   0x00001000U
-#define  RCC_PLLCFGR_PLLN_7                   0x00002000U
-#define  RCC_PLLCFGR_PLLN_8                   0x00004000U
+#define RCC_PLLCFGR_PLLN_Pos               (6U)                                
+#define RCC_PLLCFGR_PLLN_Msk               (0x1FFU << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00007FC0 */
+#define RCC_PLLCFGR_PLLN                   RCC_PLLCFGR_PLLN_Msk                
+#define RCC_PLLCFGR_PLLN_0                 (0x001U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00000040 */
+#define RCC_PLLCFGR_PLLN_1                 (0x002U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00000080 */
+#define RCC_PLLCFGR_PLLN_2                 (0x004U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00000100 */
+#define RCC_PLLCFGR_PLLN_3                 (0x008U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00000200 */
+#define RCC_PLLCFGR_PLLN_4                 (0x010U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00000400 */
+#define RCC_PLLCFGR_PLLN_5                 (0x020U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00000800 */
+#define RCC_PLLCFGR_PLLN_6                 (0x040U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00001000 */
+#define RCC_PLLCFGR_PLLN_7                 (0x080U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00002000 */
+#define RCC_PLLCFGR_PLLN_8                 (0x100U << RCC_PLLCFGR_PLLN_Pos)    /*!< 0x00004000 */
 
-#define  RCC_PLLCFGR_PLLP                    0x00030000U
-#define  RCC_PLLCFGR_PLLP_0                  0x00010000U
-#define  RCC_PLLCFGR_PLLP_1                  0x00020000U
+#define RCC_PLLCFGR_PLLP_Pos               (16U)                               
+#define RCC_PLLCFGR_PLLP_Msk               (0x3U << RCC_PLLCFGR_PLLP_Pos)      /*!< 0x00030000 */
+#define RCC_PLLCFGR_PLLP                   RCC_PLLCFGR_PLLP_Msk                
+#define RCC_PLLCFGR_PLLP_0                 (0x1U << RCC_PLLCFGR_PLLP_Pos)      /*!< 0x00010000 */
+#define RCC_PLLCFGR_PLLP_1                 (0x2U << RCC_PLLCFGR_PLLP_Pos)      /*!< 0x00020000 */
 
-#define  RCC_PLLCFGR_PLLSRC                  0x00400000U
-#define  RCC_PLLCFGR_PLLSRC_HSE              0x00400000U
-#define  RCC_PLLCFGR_PLLSRC_HSI              0x00000000U
+#define RCC_PLLCFGR_PLLSRC_Pos             (22U)                               
+#define RCC_PLLCFGR_PLLSRC_Msk             (0x1U << RCC_PLLCFGR_PLLSRC_Pos)    /*!< 0x00400000 */
+#define RCC_PLLCFGR_PLLSRC                 RCC_PLLCFGR_PLLSRC_Msk              
+#define RCC_PLLCFGR_PLLSRC_HSE_Pos         (22U)                               
+#define RCC_PLLCFGR_PLLSRC_HSE_Msk         (0x1U << RCC_PLLCFGR_PLLSRC_HSE_Pos) /*!< 0x00400000 */
+#define RCC_PLLCFGR_PLLSRC_HSE             RCC_PLLCFGR_PLLSRC_HSE_Msk          
+#define RCC_PLLCFGR_PLLSRC_HSI             0x00000000U                         
 
-#define  RCC_PLLCFGR_PLLQ                    0x0F000000U
-#define  RCC_PLLCFGR_PLLQ_0                  0x01000000U
-#define  RCC_PLLCFGR_PLLQ_1                  0x02000000U
-#define  RCC_PLLCFGR_PLLQ_2                  0x04000000U
-#define  RCC_PLLCFGR_PLLQ_3                  0x08000000U
+#define RCC_PLLCFGR_PLLQ_Pos               (24U)                               
+#define RCC_PLLCFGR_PLLQ_Msk               (0xFU << RCC_PLLCFGR_PLLQ_Pos)      /*!< 0x0F000000 */
+#define RCC_PLLCFGR_PLLQ                   RCC_PLLCFGR_PLLQ_Msk                
+#define RCC_PLLCFGR_PLLQ_0                 (0x1U << RCC_PLLCFGR_PLLQ_Pos)      /*!< 0x01000000 */
+#define RCC_PLLCFGR_PLLQ_1                 (0x2U << RCC_PLLCFGR_PLLQ_Pos)      /*!< 0x02000000 */
+#define RCC_PLLCFGR_PLLQ_2                 (0x4U << RCC_PLLCFGR_PLLQ_Pos)      /*!< 0x04000000 */
+#define RCC_PLLCFGR_PLLQ_3                 (0x8U << RCC_PLLCFGR_PLLQ_Pos)      /*!< 0x08000000 */
 
-#define  RCC_PLLCFGR_PLLR                    0x70000000U
-#define  RCC_PLLCFGR_PLLR_0                  0x10000000U
-#define  RCC_PLLCFGR_PLLR_1                  0x20000000U
-#define  RCC_PLLCFGR_PLLR_2                  0x40000000U
+/*
+ * @brief Specific device feature definitions (not present on all devices in the STM32F4 serie)
+ */
+#define RCC_PLLR_I2S_CLKSOURCE_SUPPORT     /*!< Support PLLR clock as I2S clock source */
+
+#define RCC_PLLCFGR_PLLR_Pos               (28U)                               
+#define RCC_PLLCFGR_PLLR_Msk               (0x7U << RCC_PLLCFGR_PLLR_Pos)      /*!< 0x70000000 */
+#define RCC_PLLCFGR_PLLR                   RCC_PLLCFGR_PLLR_Msk                
+#define RCC_PLLCFGR_PLLR_0                 (0x1U << RCC_PLLCFGR_PLLR_Pos)      /*!< 0x10000000 */
+#define RCC_PLLCFGR_PLLR_1                 (0x2U << RCC_PLLCFGR_PLLR_Pos)      /*!< 0x20000000 */
+#define RCC_PLLCFGR_PLLR_2                 (0x4U << RCC_PLLCFGR_PLLR_Pos)      /*!< 0x40000000 */
 
 /********************  Bit definition for RCC_CFGR register  ******************/
 /*!< SW configuration */
@@ -4583,11 +4650,13 @@ typedef struct
 #define  RCC_CFGR_SWS_PLLR                   0x0000000CU        /*!< PLL/PLLR used as system clock       */
 
 /*!< HPRE configuration */
-#define  RCC_CFGR_HPRE                       0x000000F0U        /*!< HPRE[3:0] bits (AHB prescaler) */
-#define  RCC_CFGR_HPRE_0                     0x00000010U        /*!< Bit 0 */
-#define  RCC_CFGR_HPRE_1                     0x00000020U        /*!< Bit 1 */
-#define  RCC_CFGR_HPRE_2                     0x00000040U        /*!< Bit 2 */
-#define  RCC_CFGR_HPRE_3                     0x00000080U        /*!< Bit 3 */
+#define RCC_CFGR_HPRE_Pos                  (4U)                                
+#define RCC_CFGR_HPRE_Msk                  (0xFU << RCC_CFGR_HPRE_Pos)         /*!< 0x000000F0 */
+#define RCC_CFGR_HPRE                      RCC_CFGR_HPRE_Msk                   /*!< HPRE[3:0] bits (AHB prescaler) */
+#define RCC_CFGR_HPRE_0                    (0x1U << RCC_CFGR_HPRE_Pos)         /*!< 0x00000010 */
+#define RCC_CFGR_HPRE_1                    (0x2U << RCC_CFGR_HPRE_Pos)         /*!< 0x00000020 */
+#define RCC_CFGR_HPRE_2                    (0x4U << RCC_CFGR_HPRE_Pos)         /*!< 0x00000040 */
+#define RCC_CFGR_HPRE_3                    (0x8U << RCC_CFGR_HPRE_Pos)         /*!< 0x00000080 */
 
 #define  RCC_CFGR_HPRE_DIV1                  0x00000000U        /*!< SYSCLK not divided */
 #define  RCC_CFGR_HPRE_DIV2                  0x00000080U        /*!< SYSCLK divided by 2 */
@@ -4874,54 +4943,91 @@ typedef struct
 #define  RCC_BDCR_BDRST                      0x00010000U
 
 /********************  Bit definition for RCC_CSR register  *******************/
-#define  RCC_CSR_LSION                       0x00000001U
-#define  RCC_CSR_LSIRDY                      0x00000002U
-#define  RCC_CSR_RMVF                        0x01000000U
-#define  RCC_CSR_PADRSTF                     0x04000000U
-#define  RCC_CSR_PORRSTF                     0x08000000U
-#define  RCC_CSR_SFTRSTF                     0x10000000U
-#define  RCC_CSR_WDGRSTF                     0x20000000U
-#define  RCC_CSR_WWDGRSTF                    0x40000000U
-#define  RCC_CSR_LPWRRSTF                    0x80000000U
+#define RCC_CSR_LSION_Pos                  (0U)                                
+#define RCC_CSR_LSION_Msk                  (0x1U << RCC_CSR_LSION_Pos)         /*!< 0x00000001 */
+#define RCC_CSR_LSION                      RCC_CSR_LSION_Msk                   
+#define RCC_CSR_LSIRDY_Pos                 (1U)                                
+#define RCC_CSR_LSIRDY_Msk                 (0x1U << RCC_CSR_LSIRDY_Pos)        /*!< 0x00000002 */
+#define RCC_CSR_LSIRDY                     RCC_CSR_LSIRDY_Msk                  
+#define RCC_CSR_RMVF_Pos                   (24U)                               
+#define RCC_CSR_RMVF_Msk                   (0x1U << RCC_CSR_RMVF_Pos)          /*!< 0x01000000 */
+#define RCC_CSR_RMVF                       RCC_CSR_RMVF_Msk                    
+#define RCC_CSR_PINRSTF_Pos                (26U)
+#define RCC_CSR_PINRSTF_Msk                (0x1U << RCC_CSR_PINRSTF_Pos)       /*!< 0x04000000 */
+#define RCC_CSR_PINRSTF                    RCC_CSR_PINRSTF_Msk
+#define RCC_CSR_PORRSTF_Pos                (27U)                               
+#define RCC_CSR_PORRSTF_Msk                (0x1U << RCC_CSR_PORRSTF_Pos)       /*!< 0x08000000 */
+#define RCC_CSR_PORRSTF                    RCC_CSR_PORRSTF_Msk                 
+#define RCC_CSR_SFTRSTF_Pos                (28U)                               
+#define RCC_CSR_SFTRSTF_Msk                (0x1U << RCC_CSR_SFTRSTF_Pos)       /*!< 0x10000000 */
+#define RCC_CSR_SFTRSTF                    RCC_CSR_SFTRSTF_Msk                 
+#define RCC_CSR_IWDGRSTF_Pos               (29U)
+#define RCC_CSR_IWDGRSTF_Msk               (0x1U << RCC_CSR_IWDGRSTF_Pos)      /*!< 0x20000000 */
+#define RCC_CSR_IWDGRSTF                   RCC_CSR_IWDGRSTF_Msk
+#define RCC_CSR_WWDGRSTF_Pos               (30U)                               
+#define RCC_CSR_WWDGRSTF_Msk               (0x1U << RCC_CSR_WWDGRSTF_Pos)      /*!< 0x40000000 */
+#define RCC_CSR_WWDGRSTF                   RCC_CSR_WWDGRSTF_Msk                
+#define RCC_CSR_LPWRRSTF_Pos               (31U)                               
+#define RCC_CSR_LPWRRSTF_Msk               (0x1U << RCC_CSR_LPWRRSTF_Pos)      /*!< 0x80000000 */
+#define RCC_CSR_LPWRRSTF                   RCC_CSR_LPWRRSTF_Msk
+/* Legacy defines */
+#define RCC_CSR_PADRSTF                    RCC_CSR_PINRSTF
+#define RCC_CSR_WDGRSTF                    RCC_CSR_IWDGRSTF
 
 /********************  Bit definition for RCC_SSCGR register  *****************/
-#define  RCC_SSCGR_MODPER                    0x00001FFFU
-#define  RCC_SSCGR_INCSTEP                   0x0FFFE000U
-#define  RCC_SSCGR_SPREADSEL                 0x40000000U
-#define  RCC_SSCGR_SSCGEN                    0x80000000U
+#define RCC_SSCGR_MODPER_Pos               (0U)                                
+#define RCC_SSCGR_MODPER_Msk               (0x1FFFU << RCC_SSCGR_MODPER_Pos)   /*!< 0x00001FFF */
+#define RCC_SSCGR_MODPER                   RCC_SSCGR_MODPER_Msk                
+#define RCC_SSCGR_INCSTEP_Pos              (13U)                               
+#define RCC_SSCGR_INCSTEP_Msk              (0x7FFFU << RCC_SSCGR_INCSTEP_Pos)  /*!< 0x0FFFE000 */
+#define RCC_SSCGR_INCSTEP                  RCC_SSCGR_INCSTEP_Msk               
+#define RCC_SSCGR_SPREADSEL_Pos            (30U)                               
+#define RCC_SSCGR_SPREADSEL_Msk            (0x1U << RCC_SSCGR_SPREADSEL_Pos)   /*!< 0x40000000 */
+#define RCC_SSCGR_SPREADSEL                RCC_SSCGR_SPREADSEL_Msk             
+#define RCC_SSCGR_SSCGEN_Pos               (31U)                               
+#define RCC_SSCGR_SSCGEN_Msk               (0x1U << RCC_SSCGR_SSCGEN_Pos)      /*!< 0x80000000 */
+#define RCC_SSCGR_SSCGEN                   RCC_SSCGR_SSCGEN_Msk     
 
 /********************  Bit definition for RCC_PLLI2SCFGR register  ************/
-#define  RCC_PLLI2SCFGR_PLLI2SM              0x0000003FU
-#define  RCC_PLLI2SCFGR_PLLI2SM_0            0x00000001U
-#define  RCC_PLLI2SCFGR_PLLI2SM_1            0x00000002U
-#define  RCC_PLLI2SCFGR_PLLI2SM_2            0x00000004U
-#define  RCC_PLLI2SCFGR_PLLI2SM_3            0x00000008U
-#define  RCC_PLLI2SCFGR_PLLI2SM_4            0x00000010U
-#define  RCC_PLLI2SCFGR_PLLI2SM_5            0x00000020U
+#define RCC_PLLI2SCFGR_PLLI2SM_Pos         (0U)                                
+#define RCC_PLLI2SCFGR_PLLI2SM_Msk         (0x3FU << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x0000003F */
+#define RCC_PLLI2SCFGR_PLLI2SM             RCC_PLLI2SCFGR_PLLI2SM_Msk          
+#define RCC_PLLI2SCFGR_PLLI2SM_0           (0x01U << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x00000001 */
+#define RCC_PLLI2SCFGR_PLLI2SM_1           (0x02U << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x00000002 */
+#define RCC_PLLI2SCFGR_PLLI2SM_2           (0x04U << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x00000004 */
+#define RCC_PLLI2SCFGR_PLLI2SM_3           (0x08U << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x00000008 */
+#define RCC_PLLI2SCFGR_PLLI2SM_4           (0x10U << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x00000010 */
+#define RCC_PLLI2SCFGR_PLLI2SM_5           (0x20U << RCC_PLLI2SCFGR_PLLI2SM_Pos) /*!< 0x00000020 */
 
-#define  RCC_PLLI2SCFGR_PLLI2SN              0x00007FC0U
-#define  RCC_PLLI2SCFGR_PLLI2SN_0            0x00000040U
-#define  RCC_PLLI2SCFGR_PLLI2SN_1            0x00000080U
-#define  RCC_PLLI2SCFGR_PLLI2SN_2            0x00000100U
-#define  RCC_PLLI2SCFGR_PLLI2SN_3            0x00000200U
-#define  RCC_PLLI2SCFGR_PLLI2SN_4            0x00000400U
-#define  RCC_PLLI2SCFGR_PLLI2SN_5            0x00000800U
-#define  RCC_PLLI2SCFGR_PLLI2SN_6            0x00001000U
-#define  RCC_PLLI2SCFGR_PLLI2SN_7            0x00002000U
-#define  RCC_PLLI2SCFGR_PLLI2SN_8            0x00004000U
+#define RCC_PLLI2SCFGR_PLLI2SN_Pos         (6U)                                
+#define RCC_PLLI2SCFGR_PLLI2SN_Msk         (0x1FFU << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00007FC0 */
+#define RCC_PLLI2SCFGR_PLLI2SN             RCC_PLLI2SCFGR_PLLI2SN_Msk          
+#define RCC_PLLI2SCFGR_PLLI2SN_0           (0x001U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00000040 */
+#define RCC_PLLI2SCFGR_PLLI2SN_1           (0x002U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00000080 */
+#define RCC_PLLI2SCFGR_PLLI2SN_2           (0x004U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00000100 */
+#define RCC_PLLI2SCFGR_PLLI2SN_3           (0x008U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00000200 */
+#define RCC_PLLI2SCFGR_PLLI2SN_4           (0x010U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00000400 */
+#define RCC_PLLI2SCFGR_PLLI2SN_5           (0x020U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00000800 */
+#define RCC_PLLI2SCFGR_PLLI2SN_6           (0x040U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00001000 */
+#define RCC_PLLI2SCFGR_PLLI2SN_7           (0x080U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00002000 */
+#define RCC_PLLI2SCFGR_PLLI2SN_8           (0x100U << RCC_PLLI2SCFGR_PLLI2SN_Pos) /*!< 0x00004000 */
 
-#define  RCC_PLLI2SCFGR_PLLI2SSRC            0x00400000U
-
-#define  RCC_PLLI2SCFGR_PLLI2SQ              0x0F000000U
-#define  RCC_PLLI2SCFGR_PLLI2SQ_0            0x01000000U
-#define  RCC_PLLI2SCFGR_PLLI2SQ_1            0x02000000U
-#define  RCC_PLLI2SCFGR_PLLI2SQ_2            0x04000000U
-#define  RCC_PLLI2SCFGR_PLLI2SQ_3            0x08000000U
-
-#define  RCC_PLLI2SCFGR_PLLI2SR              0x70000000U
-#define  RCC_PLLI2SCFGR_PLLI2SR_0            0x10000000U
-#define  RCC_PLLI2SCFGR_PLLI2SR_1            0x20000000U
-#define  RCC_PLLI2SCFGR_PLLI2SR_2            0x40000000U
+#define RCC_PLLI2SCFGR_PLLI2SSRC_Pos       (22U)                               
+#define RCC_PLLI2SCFGR_PLLI2SSRC_Msk       (0x1U << RCC_PLLI2SCFGR_PLLI2SSRC_Pos) /*!< 0x00400000 */
+#define RCC_PLLI2SCFGR_PLLI2SSRC           RCC_PLLI2SCFGR_PLLI2SSRC_Msk        
+#define RCC_PLLI2SCFGR_PLLI2SQ_Pos         (24U)                               
+#define RCC_PLLI2SCFGR_PLLI2SQ_Msk         (0xFU << RCC_PLLI2SCFGR_PLLI2SQ_Pos) /*!< 0x0F000000 */
+#define RCC_PLLI2SCFGR_PLLI2SQ             RCC_PLLI2SCFGR_PLLI2SQ_Msk          
+#define RCC_PLLI2SCFGR_PLLI2SQ_0           (0x1U << RCC_PLLI2SCFGR_PLLI2SQ_Pos) /*!< 0x01000000 */
+#define RCC_PLLI2SCFGR_PLLI2SQ_1           (0x2U << RCC_PLLI2SCFGR_PLLI2SQ_Pos) /*!< 0x02000000 */
+#define RCC_PLLI2SCFGR_PLLI2SQ_2           (0x4U << RCC_PLLI2SCFGR_PLLI2SQ_Pos) /*!< 0x04000000 */
+#define RCC_PLLI2SCFGR_PLLI2SQ_3           (0x8U << RCC_PLLI2SCFGR_PLLI2SQ_Pos) /*!< 0x08000000 */
+#define RCC_PLLI2SCFGR_PLLI2SR_Pos         (28U)                               
+#define RCC_PLLI2SCFGR_PLLI2SR_Msk         (0x7U << RCC_PLLI2SCFGR_PLLI2SR_Pos) /*!< 0x70000000 */
+#define RCC_PLLI2SCFGR_PLLI2SR             RCC_PLLI2SCFGR_PLLI2SR_Msk          
+#define RCC_PLLI2SCFGR_PLLI2SR_0           (0x1U << RCC_PLLI2SCFGR_PLLI2SR_Pos) /*!< 0x10000000 */
+#define RCC_PLLI2SCFGR_PLLI2SR_1           (0x2U << RCC_PLLI2SCFGR_PLLI2SR_Pos) /*!< 0x20000000 */
+#define RCC_PLLI2SCFGR_PLLI2SR_2           (0x4U << RCC_PLLI2SCFGR_PLLI2SR_Pos) /*!< 0x40000000 */
 
 /********************  Bit definition for RCC_DCKCFGR register  ****************/
 #define  RCC_DCKCFGR_CKDFSDM1ASEL            0x00008000U
@@ -5516,6 +5622,9 @@ typedef struct
 /*                        Serial Peripheral Interface                         */
 /*                                                                            */
 /******************************************************************************/
+#define SPI_I2S_FULLDUPLEX_SUPPORT                                             /*!< I2S Full-Duplex support */
+#define I2S_APB1_APB2_FEATURE                                                  /*!< I2S IP's are splited between RCC APB1 and APB2 interfaces */
+
 /*******************  Bit definition for SPI_CR1 register  ********************/
 #define  SPI_CR1_CPHA                        0x00000001U            /*!<Clock Phase      */
 #define  SPI_CR1_CPOL                        0x00000002U            /*!<Clock Polarity   */
@@ -6278,8 +6387,12 @@ typedef struct
 /*                                                                            */
 /******************************************************************************/
 /********************  Bit definition for DBGMCU_IDCODE register  *************/
-#define  DBGMCU_IDCODE_DEV_ID                0x00000FFFU
-#define  DBGMCU_IDCODE_REV_ID                0xFFFF0000U
+#define DBGMCU_IDCODE_DEV_ID_Pos                     (0U)                      
+#define DBGMCU_IDCODE_DEV_ID_Msk                     (0xFFFU << DBGMCU_IDCODE_DEV_ID_Pos) /*!< 0x00000FFF */
+#define DBGMCU_IDCODE_DEV_ID                         DBGMCU_IDCODE_DEV_ID_Msk  
+#define DBGMCU_IDCODE_REV_ID_Pos                     (16U)                     
+#define DBGMCU_IDCODE_REV_ID_Msk                     (0xFFFFU << DBGMCU_IDCODE_REV_ID_Pos) /*!< 0xFFFF0000 */
+#define DBGMCU_IDCODE_REV_ID                         DBGMCU_IDCODE_REV_ID_Msk  
 
 /********************  Bit definition for DBGMCU_CR register  *****************/
 #define  DBGMCU_CR_DBG_SLEEP                 0x00000001U
@@ -7372,6 +7485,15 @@ typedef struct
 #define USB_OTG_FS_MAX_OUT_ENDPOINTS                   6U    /* Including EP0 */
 #define USB_OTG_FS_TOTAL_FIFO_SIZE                     1280U /* in Bytes */
 
+#define FLASH_SCALE1_LATENCY1_FREQ   30000000U      /*!< HCLK frequency to set FLASH latency 1 in power scale 1  */
+#define FLASH_SCALE1_LATENCY2_FREQ   64000000U      /*!< HCLK frequency to set FLASH latency 2 in power scale 1  */
+#define FLASH_SCALE1_LATENCY3_FREQ   90000000U      /*!< HCLK frequency to set FLASH latency 3 in power scale 1  */
+
+#define FLASH_SCALE2_LATENCY1_FREQ   30000000U      /*!< HCLK frequency to set FLASH latency 1 in power scale 2  */
+#define FLASH_SCALE2_LATENCY2_FREQ   64000000U      /*!< HCLK frequency to set FLASH latency 2 in power scale 2  */
+
+#define FLASH_SCALE3_LATENCY1_FREQ   30000000U      /*!< HCLK frequency to set FLASH latency 1 in power scale 3  */
+#define FLASH_SCALE3_LATENCY2_FREQ   64000000U      /*!< HCLK frequency to set FLASH latency 2 in power scale 3  */
 
 /**
   * @}
