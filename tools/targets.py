@@ -533,7 +533,7 @@ class AZ3166Code(object):
         """Hook that is run after elf is generated"""
         with open(binf,'rb') as f:
                 appbin = f.read()
-        with open('./targets/TARGET_MXCHIP/TARGET_AZ3166/boot.bin', 'rb') as f:
+        with open('./mbed-os/targets/TARGET_MXCHIP/TARGET_AZ3166/boot.bin', 'rb') as f:
                 bootbin = f.read()
         with open(binf ,'wb') as f:
         		f.write(bootbin+'\xFF'*(0xC000-len(bootbin))+appbin)
